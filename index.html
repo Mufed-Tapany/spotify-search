@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<head>
+    <title>Spotify Search</title>
+    <meta
+        charset="utf-8"
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    />
+    <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <header>
+        <h1>Spotify Search</h1>
+        <form>
+            <input
+                type="text"
+                name="query"
+                placeholder="Type some text to search"
+                required
+                class="text-field"
+            />
+            <select name="type" class="type-field">
+                <option value="artist">Artist</option>
+                <option value="album">Album</option>
+            </select>
+            <button class="search-button" type="submit">Search</button>
+        </form>
+    </header>
+    <main>
+        <!-- in case we want to append the data using Handlebars template -->
+        <script id="results" type="text/x-handlebars-template">
+            {{#results}}
+                <li>
+                    <img src={{images.0.url}} />
+                    <a href={{external_urls.spotify}}>
+                        {{name}}
+                    </a>
+                </li>
+                <p>
+                    <button class="load-more-button">
+                        More
+                    </button>
+                </p>
+            {{/results}}
+        </script>
+
+        <!-- in case we want to append the data WITHOUT using Handlebars template -->
+        <section class="results">
+            <h2 class="result-title"></h2>
+            <ul class="result-list"></ul>
+            <p>
+                <button class="load-more-button">More</button>
+            </p>
+        </section>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
+    <script src="script.js"></script>
+</body>
