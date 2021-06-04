@@ -8,13 +8,13 @@ var $resultList = $(".result-list");
 var $resultTitle = $(".result-title");
 var $moreButton = $(".load-more-button");
 
-// define your global variables
+// defining global variables
 var nextURL = null;
 var q = null;
 var type = null;
 var useInfiniteScroll = location.search.indexOf("scroll=infinite") > -1;
 
-// start adding data using Handlebar template
+// start adding data using Handlebars template
 Handlebars.templates = Handlebars.templates || {};
 
 var templates = document.querySelectorAll(
@@ -25,27 +25,27 @@ templates.forEach(function (template) {
     Handlebars.templates[template.id] = Handlebars.compile(template.innerText);
 });
 
-function resultsHandlebarTemplate(results) {
+function renderResultsWithHandlebarTemplate(results) {
     $resultList.append(Handlebars.templates.results({ results: results }));
 }
-// end adding data using Handlebar template
+// end adding data using Handlebars template
 
 // function to check if the user scrolled to botton ... then make ajax request
-function checkScrollPos() {
+function checkScrollPosition() {
     if ($(window).scrollTop() + $(window).height() == $(document).height()) {
         $.ajax({
             url: replaceURLName(nextURL),
             success: function (data) {
                 var results = extractInfoFromData(data);
-                resultsHandlebarTemplate(results.items);
+                renderResultsWithHandlebarTemplate(results.items);
                 nextURL = results.next;
                 if (nextURL) {
-                    setTimeout(checkScrollPos, 500);
+                    setTimeout(checkScrollPosition, 500);
                 }
             },
         });
     } else {
-        setTimeout(checkScrollPos, 500);
+        setTimeout(checkScrollPosition, 500);
     }
 }
 
@@ -62,7 +62,7 @@ function replaceURLName(spotifyURL) {
     return spotifyURL.replace("https://api.spotify.com/v1/search", API_URL);
 }
 
-// the commented lines will be used when we append data without using Handlebar template
+// this function will be used when we append data without using Handlebars template
 /* function renderResults(results) {
     results.forEach(function (result) {
         // create the appropriate elements
@@ -91,7 +91,7 @@ function replaceURLName(spotifyURL) {
 // append the new results
 function showResultsAndMoreButton(data) {
     var results = extractInfoFromData(data);
-    resultsHandlebarTemplate(results.items);
+    renderResultsWithHandlebarTemplate(results.items);
     if (results.next) {
         nextURL = results.next;
         // if infinite scroll hide moreButton... otherwise show it
@@ -104,7 +104,7 @@ function showResultsAndMoreButton(data) {
 }
 
 $moreButton.on("click", function () {
-    // make an ajax request to the nextURL
+    // making an ajax request to the nextURL
     $.ajax({
         url: replaceURLName(nextURL),
         success: function (data) {
@@ -135,7 +135,7 @@ $form.on("submit", function (event) {
             nextURL = results.next;
             // render the results
             if (useInfiniteScroll) {
-                checkScrollPos();
+                checkScrollPosition();
             } else {
                 showResultsAndMoreButton(data);
             }
